@@ -1,1 +1,62 @@
-# Lu-method
+#include <iostream>
+using namespace std;
+
+// Function to perform LU Decomposition
+void luDecomposition(double A[10][10], double L[10][10], double U[10][10], int n) {
+    for (int i = 0; i < n; i++) {  // Upper Triangular
+        for (int k = i; k < n; k++) {
+            double sum = 0;
+            for (int j = 0; j < i; j++)
+                sum += (L[i][j] * U[j][k]);
+            U[i][k] = A[i][k] - sum;
+        }
+        // Lower Triangular
+        for (int k = i; k < n; k++) {
+            if (i == k)
+                L[i][i] = 1; // Diagonal as 1
+            else {
+                double sum = 0;
+                for (int j = 0; j < i; j++)
+                    sum += (L[k][j] * U[j][i]);
+                L[k][i] = (A[k][i] - sum) / U[i][i];
+            }
+        }
+    }
+}
+
+// Function to read a matrix
+void readMatrix(double A[10][10], int n) {
+    cout << "Enter matrix elements (A):\n";
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            cin >> A[i][j];
+}
+
+// Function to print a matrix
+void printMatrix(double M[10][10], int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++)
+            cout << M[i][j] << "\t";
+        cout << endl;
+    }
+}
+
+int main() {
+    int n;
+    double A[10][10], L[10][10] = {0}, U[10][10] = {0};
+
+  cout << "Enter matrix size: ";
+    cin >> n;
+
+   // Function calling
+    readMatrix(A, n);
+    luDecomposition(A, L, U, n);
+
+   cout << "\nLower Triangular Matrix (L):\n";
+    printMatrix(L, n);
+
+  cout << "\nUpper Triangular Matrix (U):\n";
+    printMatrix(U, n);
+
+  return 0;
+}
